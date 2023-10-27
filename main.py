@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from Login import Login
+from Formatacao import Formatacao
 
 browser = webdriver.Chrome()
 
@@ -16,6 +17,7 @@ password = browser.find_element(By.ID, "j_password")
 botaoEntrar = browser.find_element(By.ID, "commandButton_entrar")
 
 login = Login()
+formatacao = Formatacao()
 
 cpf_string = str(login.get_cpf())
 senha_string = str(login.get_senha())
@@ -37,7 +39,7 @@ browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_Em
 botaoNao = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:selectradio_retencao_iss"]/tbody/tr/td[3]/div')
 botaoNao.click()
 formulario = browser.find_element(By.ID, 'form_emitir_nfse:calendar_competencia_input')
-formulario.send_keys("27/10/2023")
+formulario.send_keys(str(formatacao.get_data()))
 botaoProsseguir = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar')
 botaoProsseguir.click()
 
@@ -75,11 +77,10 @@ valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_se
 valorServico.click()
 valorServico.send_keys("200,00")
 
-time.sleep(60)
+browser.execute_script("window.open('', '_blank');")
+browser.switch_to.window(browser.window_handles[-1])
+browser.get("https://acsafeweb.safewebpss.com.br/gerenciamentoac")
 
 
 time.sleep(60)
-
-
-
 
