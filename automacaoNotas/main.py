@@ -9,38 +9,10 @@ from Login import Login
 from Formatacao import Formatacao
 
 browser = webdriver.Chrome()
-lerPlanilha = pd.read_excel('C:\\Users\\Suporte\\Downloads\\PlanilhaSara.xlsx', sheet_name='16 a 20.10')
+lerPlanilha = pd.read_excel('C:\\Users\\Suporte\\Downloads\\Emissões Sara Outubro (2).xlsx', sheet_name='16 a 20.10')
 lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
 lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
-
-
-browser.execute_script("window.open('', '_blank');")
-browser.switch_to.window(browser.window_handles[-1])
-browser.maximize_window()
-browser.get("https://acsafeweb.safewebpss.com.br/gerenciamentoac")
-time.sleep(30)
-
-relatorio = browser.find_element(By.XPATH, '//*[@id="link6"]').click()
-time.sleep(1.5)
-
-relatorioEmissao = browser.find_element(By.XPATH, '//*[@id="link9"]').click()
-
-campoProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[4]/div[1]/input')
-
-time.sleep(1.5)
-campoProtocolo.click()
-
-campoProtocolo.send_keys(lerPlanilha['Protocolo'][0])
-
-botaoPesquisarProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[9]/div/div/div/button[1]').click()
-time.sleep(4)
-
-lupaProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[2]/table/tbody/tr/td[2]/i[1]').click()
-
-cep = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[1]/input').text
-
-print(str(cep))
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/login.jsf")
 loginCpf = browser.find_element(By.ID, "j_username")
@@ -56,27 +28,60 @@ senha = str(login.get_senha())
 loginCpf.send_keys(str(login.get_cpf()))
 password.send_keys(str(login.get_senha()))
 botaoEntrar.click()
+
 for x in range(7):
     try:
         botaoContinuar = browser.find_element(By.ID, 'formMensagens:commandButton_confirmar')
         botaoContinuar.click()
     except:
         print("")
-        
+
+browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
+
 browser.execute_script("window.open('', '_blank');")
 browser.switch_to.window(browser.window_handles[-1])
-browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
-    
-botaoNao = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:selectradio_retencao_iss"]/tbody/tr/td[3]/div')
-botaoNao.click()
-formulario = browser.find_element(By.ID, 'form_emitir_nfse:calendar_competencia_input')
-formulario.send_keys(str(formatacao.get_data()))
-botaoProsseguir = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar')
-botaoProsseguir.click()
-
-time.sleep(2)
+browser.maximize_window()
+browser.get("https://acsafeweb.safewebpss.com.br/gerenciamentoac")
 
 for x in range(int(formatacao.quantidadeNotas())):
+    while True:
+        try:
+            relatorio = browser.find_element(By.XPATH, '//*[@id="link6"]').click()
+            break
+        except:
+            continue
+
+    relatorioEmissao = browser.find_element(By.XPATH, '//*[@id="link9"]').click()
+
+    campoProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[4]/div[1]/input')
+
+    while True:
+        try:
+            campoProtocolo.send_keys(lerPlanilha['Protocolo'][0])
+            break
+        except:
+            continue
+
+    botaoPesquisarProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[9]/div/div/div/button[1]').click()
+
+    while True:
+        try:
+            lupaProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[2]/table/tbody/tr/td[2]/i[1]').click()
+            break
+        except:
+            continue
+
+    browser.switch_to.window(browser.window_handles[0])
+
+    botaoNao = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:selectradio_retencao_iss"]/tbody/tr/td[3]/div')
+    botaoNao.click()
+    formulario = browser.find_element(By.ID, 'form_emitir_nfse:calendar_competencia_input')
+    formulario.send_keys(str(formatacao.get_data()))
+    botaoProsseguir = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar')
+    botaoProsseguir.click()
+
+    time.sleep(2)
+
     caixa_cpf_cnpj = browser.find_element(By.NAME, 'form_emitir_nfse:inputmask_cpf_cnpj')
     caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
     time.sleep(2)
