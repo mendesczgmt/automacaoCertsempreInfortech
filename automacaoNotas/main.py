@@ -76,41 +76,41 @@ botaoProsseguir.click()
 
 time.sleep(2)
 
-caixa_cpf_cnpj = browser.find_element(By.NAME, 'form_emitir_nfse:inputmask_cpf_cnpj')
-caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][0])
-time.sleep(2)
+for x in range(int(formatacao.quantidadeNotas())):
+    caixa_cpf_cnpj = browser.find_element(By.NAME, 'form_emitir_nfse:inputmask_cpf_cnpj')
+    caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
+    time.sleep(2)
 
-botao_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_buscar_cpfcnpj"]/span').click()
-time.sleep(2)
+    botao_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_buscar_cpfcnpj"]/span').click()
+    time.sleep(2)
 
-botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar').click()
-time.sleep(2)
+    botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar').click()
+    time.sleep(2)
 
-itemListaServico = browser.find_element(By.ID, 'form_emitir_nfse:selectOneMenu_lista_servico_label').click()
+    itemListaServico = browser.find_element(By.ID, 'form_emitir_nfse:selectOneMenu_lista_servico_label').click()
 
-time.sleep(2)
+    time.sleep(2)
 
-servico = browser.find_element(By.ID, 'form_emitir_nfse:selectOneMenu_lista_servico_panel').click()
+    servico = browser.find_element(By.ID, 'form_emitir_nfse:selectOneMenu_lista_servico_panel').click()
 
-time.sleep(2)
+    time.sleep(2)
 
-descricaoDetalhada = browser.find_element(By.ID, 'form_emitir_nfse:intputtextarea_descricao_detalhada')
-descricaoDetalhada.click()
-descricaoDetalhada.send_keys("Referente a emissão do Certificado Digital")
+    descricaoDetalhada = browser.find_element(By.ID, 'form_emitir_nfse:intputtextarea_descricao_detalhada')
+    descricaoDetalhada.click()
+    descricaoDetalhada.send_keys("Referente a emissão do Certificado Digital")
 
-time.sleep(2)
+    time.sleep(2)
 
-botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar_mensagem').click()
-time.sleep(2)
+    botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar_mensagem').click()
+    time.sleep(2)
 
-botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar').click()
-time.sleep(2)
+    botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar').click()
+    time.sleep(2)
 
-valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico')
-valorServico.click()
+    valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico')
+    valorServico.click()
 
-valorServico.send_keys(lerPlanilha['Valor do Boleto'][0])
+    valorServico.send_keys(lerPlanilha['Valor do Boleto'][x])
 
-lerPlanilha = lerPlanilha.drop[1]
 
 
