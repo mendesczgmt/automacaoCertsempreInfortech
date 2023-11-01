@@ -7,7 +7,7 @@ from Login import Login
 browser = webdriver.Chrome()
 browser.get("https://www.safe2pay.com.br/")
 browser.maximize_window()
-protocolo = "1004859750"
+protocolo = "67288940"
 
 login = Login()
 
@@ -26,8 +26,8 @@ time.sleep(5)
 def liberarBoleto():
     try:
         browser.find_element(By.XPATH, '//*[@id="SidebarTransacao"]/div/div/div[2]/div[3]/div[1]/button').click()
-        time.sleep(20)
         browser.find_element(By.XPATH, '/html/body/div[13]/div/div[4]/div[2]/button').click()
+        time.sleep(20)
     except:
         print("erro no momento da liberação")
 
