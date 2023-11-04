@@ -1,15 +1,32 @@
 import time
 import pandas as pd
+import os
 
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from Login import Login
 from Formatacao import Formatacao
 
+########################################################
+
+chrome_options = Options()
+chrome_options.add_experimental_option("prefs", {
+    "download.default_directory": "C:\\Users\\Suporte\\OneDrive\\Documentos\\PastaTesteAutomacoes",
+    "download.prompt_for_download": False,
+    "download.directory_upgrade": True,
+    "safebrowsing.enabled": True
+})
+
+
+#########################################################
+
 shetname = '16 a 20.10'
-caminhoNotas = 'C:\\Users\\gabry\\Downloads\\Emissões.xlsx'
+caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\PLANILHA TESTE AUTOMACAO.xlsx'
+caminhoNotasBaixadas = "C:\\Users\\Suporte\\OneDrive\\Documentos\\PastaTesteAutomacoes"
+
 
 browser = webdriver.Chrome()
 browser.maximize_window()
@@ -18,6 +35,9 @@ lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname)
 lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
 lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
+lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
+
+
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/login.jsf")
 browser.execute_script("window.open('', '_blank');")
@@ -222,9 +242,53 @@ for x in range(int(formatacao.quantidadeNotas())):
             valor = (lerPlanilha['Valor do Boleto'][x])
             valor += "00"
             valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').send_keys(valor)
-            print("olá")
+            break
+        except:
+            continue
+    
+    while True:
+        try:
+            botaoEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandButton_emitir"]/span[2]').click()
+            break
+        except:
+            continue
+    
+    while True:
+        try:
+            spanConfirmarEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_confirmdialog_sim"]/span').click()
+            break
+        except:
+            continue 
+    
+    while True:
+        try:
+            visualisarNota = browser.find_element(By.XPATH, '//*[@id="form_confirmation_nfse:j_idt56"]/span[2]').click()
+            break
+        except:
+            continue 
+    
+    while True:
+        try:
+            botaoDowloadNota = browser.find_element(By.XPATH, '//*[@id="icon"]/iron-icon').click()
+            print("Estou preso")
             break
         except:
             continue
 
-time.sleep(50)
+    while True:
+        try:
+            botaoDowloadNota = browser.find_element(By.XPATH, '//*[@id="icon"]/iron-icon').click()
+            print("Estou preso")
+            break
+        except:
+            continue
+
+    while True:
+        try:
+            nomeArquivoNota = (lerPlanilha['Nome'][x])
+            caminhoArquivoBaixado = os.path.join(caminhoNotasBaixadas, nomeArquivoNota)
+            os.rename(caminhoNotasBaixadas, os.path.join(caminhoNotasBaixadas, nomeArquivoNota))
+            break
+        except:
+            continue
+

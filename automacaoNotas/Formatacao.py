@@ -3,13 +3,13 @@ import datetime
 import pandas as pd
 
 shetname = '16 a 20.10'
-caminhoNotas = 'C:\\Users\\gabry\\Downloads\\Emissões.xlsx'
+caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\PLANILHA TESTE AUTOMACAO.xlsx'
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname)
 
 class Formatacao:
     def __init__(self):
         self._data = datetime.date.today().strftime('%d/%m/%Y')
-        self._caminhoNotas = 'C:\\Users\\gabry\\Downloads\\Emissões.xlsx'
+        self._caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\PLANILHA TESTE AUTOMACAO.xlsx'
         self._valor = 0
     
     def formatarValor(self, valor):
