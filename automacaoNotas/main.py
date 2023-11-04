@@ -219,12 +219,12 @@ for x in range(int(formatacao.quantidadeNotas())):
             continue
     while True:
         try:
-            valor = valorServico.send_keys(lerPlanilha['Valor do Boleto'][x])
+            valor = (lerPlanilha['Valor do Boleto'][x])
+            valor += "00"
             valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').send_keys(valor)
             print("olá")
             break
         except:
-            print("holá")
             continue
 
 time.sleep(50)
