@@ -1,32 +1,19 @@
 import time
 import pandas as pd
 import os
+import pyautogui
 
 from datetime import datetime
 from selenium import webdriver
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from Login import Login
 from Formatacao import Formatacao
 
-########################################################
-
-chrome_options = Options()
-chrome_options.add_experimental_option("prefs", {
-    "download.default_directory": "C:\\Users\\Suporte\\OneDrive\\Documentos\\PastaTesteAutomacoes",
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True,
-    "safebrowsing.enabled": True
-})
-
-
-#########################################################
-
-shetname = '16 a 20.10'
-caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\PLANILHA TESTE AUTOMACAO.xlsx'
-caminhoNotasBaixadas = "C:\\Users\\Suporte\\OneDrive\\Documentos\\PastaTesteAutomacoes"
-
+shetname = '01'
+caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\Planilha Sara Novembro 01.xlsx'
 
 browser = webdriver.Chrome()
 browser.maximize_window()
@@ -36,8 +23,6 @@ lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
 lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
 lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
-
-
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/login.jsf")
 browser.execute_script("window.open('', '_blank');")
@@ -57,9 +42,14 @@ formatacao = Formatacao()
 cpf = str(login.get_cpf())
 senha = str(login.get_senha())
 
-loginCpf.send_keys(str(login.get_cpf()))
-password.send_keys(str(login.get_senha()))
-botaoEntrar.click()
+while True:
+    try:
+        loginCpf.send_keys(str(login.get_cpf()))
+        password.send_keys(str(login.get_senha()))
+        botaoEntrar.click()
+        break
+    except:
+        continue
 
 for x in range(7):
     try:
@@ -96,6 +86,7 @@ for x in range(int(formatacao.quantidadeNotas())):
     time.sleep(2)
 
     caixa_cpf_cnpj = browser.find_element(By.NAME, 'form_emitir_nfse:inputmask_cpf_cnpj')
+    caixa_cpf_cnpj.clear()
     caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
     time.sleep(2)
 
@@ -138,7 +129,7 @@ for x in range(int(formatacao.quantidadeNotas())):
                     break
                 except:
                     continue
-       
+    
             while True:
                 try:
                     razaoSocial = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[3]/div[1]/input').get_attribute("value")
@@ -187,7 +178,9 @@ for x in range(int(formatacao.quantidadeNotas())):
                 except:
                     continue
             inputCep = browser.find_element(By.ID, 'form_emitir_nfse:sispmjp_endereco:inputmask_cep').send_keys(cep)
+            time.sleep(3)
             botaoPesquisarCep = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:commandButton_buscar"]/span').click()
+            time.sleep(3)
             inputLogradouro = browser.find_element(By.ID, 'form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro').send_keys(logradouro)
             inputBairro = browser.find_element(By.ID, 'form_emitir_nfse:sispmjp_endereco:inputtext_bairro').send_keys(bairro)
             time.sleep(5)
@@ -252,7 +245,7 @@ for x in range(int(formatacao.quantidadeNotas())):
             break
         except:
             continue
-    
+
     while True:
         try:
             spanConfirmarEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_confirmdialog_sim"]/span').click()
@@ -267,28 +260,25 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue 
     
-    while True:
+    time.sleep(700)
+    
+    while True :
         try:
-            botaoDowloadNota = browser.find_element(By.XPATH, '//*[@id="icon"]/iron-icon').click()
-            print("Estou preso")
+            img = pyautogui.locateCenterOnScreen('botao_dowload_nota.png', confidence=0.9)
+            pyautogui.click(img.x, img.y)
             break
         except:
             continue
-
+    
     while True:
         try:
-            botaoDowloadNota = browser.find_element(By.XPATH, '//*[@id="icon"]/iron-icon').click()
-            print("Estou preso")
+            pyautogui.write(lerPlanilha['Nome'][0])
+            pyautogui.press('enter')
             break
         except:
             continue
+    
+    browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
+    
 
-    while True:
-        try:
-            nomeArquivoNota = (lerPlanilha['Nome'][x])
-            caminhoArquivoBaixado = os.path.join(caminhoNotasBaixadas, nomeArquivoNota)
-            os.rename(caminhoNotasBaixadas, os.path.join(caminhoNotasBaixadas, nomeArquivoNota))
-            break
-        except:
-            continue
-
+    
