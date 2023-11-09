@@ -14,6 +14,11 @@ from Formatacao import Formatacao
 shetname = '01'
 caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\Planilha Sara Novembro 01.xlsx'
 
+options = webdriver.ChromeOptions()
+prefs = {"download.default_directory" : "C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\PASTA NOTAS"}
+options.add_experimental_option("prefs",prefs)
+driver = webdriver.Chrome(options=options)
+
 browser = webdriver.Chrome()
 browser.maximize_window()
 
@@ -35,6 +40,7 @@ botaoEntrar = browser.find_element(By.ID, "commandButton_entrar")
 
 login = Login()
 formatacao = Formatacao()
+totalNotasEmitidas = 0
 
 cpf = str(login.get_cpf())
 senha = str(login.get_senha())
@@ -60,6 +66,7 @@ for x in range(7):
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
 
 for x in range(int(formatacao.quantidadeNotas())):
+    totalNotasEmitidas += 1
 
     while True:
         try:
@@ -87,7 +94,6 @@ for x in range(int(formatacao.quantidadeNotas())):
     caixa_cpf_cnpj.clear()
     time.sleep(1)
     caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
-    print(lerPlanilha['Documento'][x])
     time.sleep(2)
     botao_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_buscar_cpfcnpj"]/span').click()
     time.sleep(2)
@@ -325,6 +331,10 @@ for x in range(int(formatacao.quantidadeNotas())):
     while True:
         try:
             botaoContinuar = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_fechar_visualizacao"]/span').click()
+            print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
+            print('NOTA FISCAL DE ' + lerPlanilha['Nome'][x] + ' FINALIZADA ✔')
+            print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
+            print(f'Total: {totalNotasEmitidas}')
             break
         except:
             continue
