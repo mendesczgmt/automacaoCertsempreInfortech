@@ -12,10 +12,10 @@ from Login import Login
 from Formatacao import Formatacao
 
 shetname = '01'
-caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\Planilha Sara Novembro 01.xlsx'
+caminhoNotas = 'C:\\Users\\gabry\\Downloads\\Planilha Sara Novembro 01.xlsx'
 
 options = webdriver.ChromeOptions()
-prefs = {"download.default_directory" : "C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\PASTA NOTAS"}
+prefs = {"download.default_directory" : "C:\\Users\\gabry\\Downloads"}
 options.add_experimental_option("prefs",prefs)
 driver = webdriver.Chrome(options=options)
 
@@ -44,8 +44,6 @@ totalNotasEmitidas = 0
 
 cpf = str(login.get_cpf())
 senha = str(login.get_senha())
-email = str(login.get_email())
-senhaEmail = str(login.get_senhaEmail())
 
 while True:
     try:
@@ -116,7 +114,7 @@ for x in range(int(formatacao.quantidadeNotas())):
                     break
                 except:
                     continue
-            
+        
             while True:
                 try:
                     relatorioEmissao = browser.find_element(By.XPATH, '//*[@id="link9"]').click()  
@@ -143,11 +141,10 @@ for x in range(int(formatacao.quantidadeNotas())):
             while True:
                 try:
                     lupaProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[2]/table/tbody/tr/td[2]/i[1]').click()
-                    time.sleep(3)
                     break
                 except:
                     continue
-    
+            
             while True:
                 try:
                     razaoSocial = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[3]/div[1]/input').get_attribute("value")
@@ -166,12 +163,20 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
+                    numero = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[2]/input').get_attribute("value")
+                    if(numero != ""):
+                        break
+                except:
+                    continue
+
+            while True:
+                try:
                     logradouro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[1]/input').get_attribute("value")
                     if(logradouro != ""):
                         break
                 except:
                     continue
-            
+
             while True:
                 try:
                     bairro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[3]/input').get_attribute("value")
@@ -182,58 +187,86 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
-                    numero = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[2]/input').get_attribute("value")
-                    if(numero != ""):
+                    municipio = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[3]/input').get_attribute("value")
+                    if(municipio != ""):
                         break
                 except:
                     continue
-            
+
+            else:
+                continue
+
             browser.switch_to.window(browser.window_handles[0])
 
             while True:
                 try:
-                    inputRazao = browser.find_element(By.ID, 'form_emitir_nfse:inputtext_nomeempresarial_nome').send_keys(razaoSocial)
+                    campoRazaoSocial = browser.find_element(By.ID,'form_emitir_nfse:inputtext_nomeempresarial_nome').send_keys(razaoSocial)
                     break
                 except:
                     continue
 
             while True:
                 try:
-                    inputCep = browser.find_element(By.ID, 'form_emitir_nfse:sispmjp_endereco:inputmask_cep').send_keys(cep)
+                    campoCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:inputmask_cep').send_keys(cep)
                     break
                 except:
                     continue
 
             while True:
+                if(campoCep != ""):
+                    botaoBuscarCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:commandButton_buscar').click()
+                    time.sleep(2)
+                    break
+                else:
+                    continue
+            
+            while True:
                 try:
-                    botaoPesquisarCep = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:commandButton_buscar"]/span').click()
+                    time.sleep(2)
+                    botaoSelecionarEstado = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:select_estado"]/div[3]').click()
+                    time.sleep(1)
+                    botaoSelecionarEstado = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:select_estado_panel"]/div/ul/li[2]').click()
                     break
                 except:
-                    continue
+                    break
 
             while True:
                 try:
-                    inputLogradouro = browser.find_element(By.ID, 'form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro').send_keys(logradouro)
+                    time.sleep(1.5)
+                    botaoSelecionarCidade = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio"]/div[3]').click()
+                    time.sleep(1)
+                    municipio = municipio.lower()
+                    cidades = ['//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[2]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[3]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[136]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[212]','//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_label"]']
+                    for x in cidades:
+                        cidade = browser.find_element(By.XPATH, f'{x}').text
+                        if(cidade.lower() == municipio):
+                            cidadeClique = browser.find_element(By.XPATH, f'{x}').click()
+                            break
                     break
                 except:
-                    continue
+                    print("erro nas cidades")
+                    break
 
             while True:
                 try:
-                    inputBairro = browser.find_element(By.ID, 'form_emitir_nfse:sispmjp_endereco:inputtext_bairro').send_keys(bairro)
+                    campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]').send_keys(logradouro)
                     break
                 except:
                     continue
-
             while True:
                 try:
-                    inputNumero = browser.find_element(By.ID, 'form_emitir_nfse:sispmjp_endereco:inputmask_numero').send_keys(numero)
+                    campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]').send_keys(numero)
+                    break
+                except:
+                    continue
+            while True:
+                try:
+                    campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]').send_keys(bairro)
                     break
                 except:
                     continue
         except:
-            break
-
+            break                
     while True:
         try:
             botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar').click()
@@ -278,21 +311,23 @@ for x in range(int(formatacao.quantidadeNotas())):
     while True:
         try:
             valor = (lerPlanilha['Valor do Boleto'][x])
-            valor += "00"
+            valor = "00"
             valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').send_keys(valor)
             break
         except:
             continue
     
     while True:
-        try:
+        try:  
             botaoEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandButton_emitir"]/span[2]').click()
+            time.sleep(5000)
             break
         except:
             continue
 
     while True:
         try:
+            time.sleep(5000)
             spanConfirmarEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_confirmdialog_sim"]/span').click()
             break
         except:
@@ -338,8 +373,3 @@ for x in range(int(formatacao.quantidadeNotas())):
             break
         except:
             continue
-    
-
-    
- 
-    
