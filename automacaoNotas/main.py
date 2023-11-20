@@ -1,32 +1,45 @@
 import time
 import pandas as pd
 import pyautogui
+import openpyxl
 
 from datetime import datetime
 from selenium import webdriver
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from Login import Login
 from Formatacao import Formatacao
-
-shetname = '01'
-caminhoNotas = 'C:\\Users\\gabry\\Downloads\\Planilha Sara Novembro 01.xlsx'
+from selenium import webdriver
 
 options = webdriver.ChromeOptions()
-prefs = {"download.default_directory" : "C:\\Users\\gabry\\Downloads"}
-options.add_experimental_option("prefs",prefs)
-driver = webdriver.Chrome(options=options)
+options.add_experimental_option('prefs', {
+    'download.default_directory': 'C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\Notas fiscais\\11 - NOVEMBRO 2023',
+    'download.prompt_for_download': False,
+    'download.directory_upgrade': True,
+    'plugins.always_open_pdf_externally': True,
+    'safebrowsing.enabled': True
+})
+
 
 browser = webdriver.Chrome()
 browser.maximize_window()
 
+############## Leitura da planilha ##############
+
+shetname = '01 a 10.11'
+caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Sara Novembro Nova.xlsx'
+
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
+
+lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
+lerPlanilha['Produto'] = lerPlanilha['Produto'].astype(str)
+lerPlanilha['Nome do AVP'] = lerPlanilha['Nome do AVP'].astype(str)
 lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
 lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
-lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
+
+###################################################
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/login.jsf")
 browser.execute_script("window.open('', '_blank');")
@@ -44,6 +57,8 @@ totalNotasEmitidas = 0
 
 cpf = str(login.get_cpf())
 senha = str(login.get_senha())
+contador = 0
+
 
 while True:
     try:
@@ -64,8 +79,7 @@ for x in range(7):
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
 
 for x in range(int(formatacao.quantidadeNotas())):
-    totalNotasEmitidas += 1
-
+    
     while True:
         try:
             botaoNao = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:selectradio_retencao_iss"]/tbody/tr/td[3]/div').click()
@@ -87,14 +101,14 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
     
-    time.sleep(2)
+    time.sleep(1.5)
     caixa_cpf_cnpj = browser.find_element(By.NAME, 'form_emitir_nfse:inputmask_cpf_cnpj')
     caixa_cpf_cnpj.clear()
-    time.sleep(1)
+    time.sleep(1.5)
     caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
-    time.sleep(2)
+    time.sleep(1.5)
     botao_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_buscar_cpfcnpj"]/span').click()
-    time.sleep(2)
+    time.sleep(1.5)
 
     while True:
         try:
@@ -207,15 +221,16 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
+                    campoCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:inputmask_cep').click()
                     campoCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:inputmask_cep').send_keys(cep)
                     break
                 except:
                     continue
 
             while True:
+                time.sleep(1.5)
                 if(campoCep != ""):
                     botaoBuscarCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:commandButton_buscar').click()
-                    time.sleep(2)
                     break
                 else:
                     continue
@@ -237,10 +252,10 @@ for x in range(int(formatacao.quantidadeNotas())):
                     time.sleep(1)
                     municipio = municipio.lower()
                     cidades = ['//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[2]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[3]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[136]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[212]','//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_label"]']
-                    for x in cidades:
-                        cidade = browser.find_element(By.XPATH, f'{x}').text
+                    for y in cidades:
+                        cidade = browser.find_element(By.XPATH, f'{y}').text
                         if(cidade.lower() == municipio):
-                            cidadeClique = browser.find_element(By.XPATH, f'{x}').click()
+                            cidadeClique = browser.find_element(By.XPATH, f'{y}').click()
                             break
                     break
                 except:
@@ -249,18 +264,21 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
+                    campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]').clear()
                     campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]').send_keys(logradouro)
                     break
                 except:
                     continue
             while True:
                 try:
+                    campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]').clear()
                     campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]').send_keys(numero)
                     break
                 except:
                     continue
             while True:
                 try:
+                    campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]').clear()
                     campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]').send_keys(bairro)
                     break
                 except:
@@ -285,6 +303,7 @@ for x in range(int(formatacao.quantidadeNotas())):
     while True:
         try:
             servico = browser.find_element(By.ID, 'form_emitir_nfse:selectOneMenu_lista_servico_panel').click()
+            time.sleep(2)
             break
         except:
             continue
@@ -308,11 +327,15 @@ for x in range(int(formatacao.quantidadeNotas())):
             break
         except:
             continue
+
     while True:
         try:
             valor = (lerPlanilha['Valor do Boleto'][x])
-            valor = "00"
-            valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').send_keys(valor)
+            valor = valor + '00'
+            valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').click()
+            valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').send_keys(valor)
+            #valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').click()
+            #valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').send_keys(valor)
             break
         except:
             continue
@@ -320,14 +343,12 @@ for x in range(int(formatacao.quantidadeNotas())):
     while True:
         try:  
             botaoEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandButton_emitir"]/span[2]').click()
-            time.sleep(5000)
             break
         except:
             continue
 
     while True:
         try:
-            time.sleep(5000)
             spanConfirmarEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_confirmdialog_sim"]/span').click()
             break
         except:
@@ -342,9 +363,13 @@ for x in range(int(formatacao.quantidadeNotas())):
 
     while True:
         try:
-            img = pyautogui.locateCenterOnScreen('botao_dowload_nota.png', confidence=0.9)
+            endereco = 'C:\\Users\\Suporte\\OneDrive\\Documentos\\Kaio\\automacaoCertsempreInfortech\\automacaoNotas\\dwn.png'
+            img = pyautogui.locateCenterOnScreen(endereco)
             pyautogui.click(img.x, img.y)
             time.sleep(3)
+#           img = pyautogui.locateCenterOnScreen('dwn.jpg', confidence=0.9)
+#           pyautogui.click(img.x, img.y)
+#           time.sleep(3)
             break
         except:
             continue
@@ -363,13 +388,18 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
     
+
     while True:
         try:
             botaoContinuar = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_fechar_visualizacao"]/span').click()
-            print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
-            print('NOTA FISCAL DE ' + lerPlanilha['Nome'][x] + ' FINALIZADA ✔')
-            print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
-            print(f'Total: {totalNotasEmitidas}')
             break
         except:
             continue
+
+    contador +=1
+
+    print('')
+    print('———————————————————————————–—————–—————–—————–——–—————–——–—————–——–—————–——–—————–')
+    print(f'NOTA FISCAL DE NRª {contador} EMITIDA COM SUCESSO ✅ ')
+    print('———————————————————————————–—————–—————–—————–——–—————–——–—————–——–—————–——–—————–')
+    print('')

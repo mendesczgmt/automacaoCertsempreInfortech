@@ -1,15 +1,15 @@
 import datetime
 import pandas as pd
 
-shetname = '01'
-caminhoNotas = 'C:\\Users\\gabry\\Downloads\\Planilha Sara Novembro 01.xlsx'
+shetname = '01 a 10.11'
+caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Sara Novembro Nova.xlsx'
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname)
 
 class Formatacao:
     def __init__(self):
         self._data = datetime.date.today().strftime('%d/%m/%Y')
-        self._caminhoNotas = 'C:\\Users\\gabry\\Downloads\\Planilha Sara Novembro 01.xlsx'
-        self.shetname = '01'
+        self._caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Sara Novembro Nova.xlsx'
+        self.shetname = '01 a 10.11'
         self._valor = 0
     
     def formatarValor(self, valor):
