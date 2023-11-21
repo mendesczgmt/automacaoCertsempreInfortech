@@ -2,7 +2,14 @@ import time
 import pandas as pd
 import pyautogui
 import openpyxl
+import os
 
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+import email.message
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -11,16 +18,6 @@ from selenium.webdriver.common.keys import Keys
 from Login import Login
 from Formatacao import Formatacao
 from selenium import webdriver
-
-options = webdriver.ChromeOptions()
-options.add_experimental_option('prefs', {
-    'download.default_directory': 'C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\Notas fiscais\\11 - NOVEMBRO 2023',
-    'download.prompt_for_download': False,
-    'download.directory_upgrade': True,
-    'plugins.always_open_pdf_externally': True,
-    'safebrowsing.enabled': True
-})
-
 
 browser = webdriver.Chrome()
 browser.maximize_window()
@@ -38,6 +35,7 @@ lerPlanilha['Nome do AVP'] = lerPlanilha['Nome do AVP'].astype(str)
 lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
 lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
+lerPlanilha['E-mail do Titular'] = lerPlanilha['E-mail do Titular'].astype(str)
 
 ###################################################
 
@@ -80,6 +78,23 @@ browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_Em
 
 for x in range(int(formatacao.quantidadeNotas())):
     
+    ######### OPÇÕES DO NAVEGADOR #########
+
+    options = webdriver.ChromeOptions()
+    nome_cliente = lerPlanilha['Nome'][x]
+    caminho_pdf = f'C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\Notas fiscais\\11 - NOVEMBRO 2023\\{nome_cliente}.pdf'
+
+    options.add_experimental_option('prefs', {
+        'download.default_directory': caminho_pdf,
+        'download.prompt_for_download': False,
+        'download.directory_upgrade': True,
+        'plugins.always_open_pdf_externally': True,
+        'safebrowsing.enabled': True,
+        'profile.default_content_settings.popups': 0
+    })
+
+    ######## OPÇÕES DO NAVEGADOR #########
+
     while True:
         try:
             botaoNao = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:selectradio_retencao_iss"]/tbody/tr/td[3]/div').click()
@@ -388,6 +403,17 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
     
+    time.sleep(7)
+    
+    nome_cliente = lerPlanilha['Nome'][x]
+
+    caminho_pdf =f'C:\\Users\\Suporte\\Downloads\\{nome_cliente}.pdf'
+
+    if os.path.exists(caminho_pdf):
+        print(f"        DOWNLOAD CONCLUÍDO PARA {nome_cliente}")
+    else:
+        print(f"        ERRO NO DOWNLOAD PARA {nome_cliente}")
+    
 
     while True:
         try:
@@ -396,10 +422,36 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
 
+            
+
+    corpo_email = """
+    <p>Segue em anexo a nota fiscal referente ao certificado digital</p>
+    """
+
+    msg = MIMEMultipart()
+    msg['Subject'] = "Nota fiscal Certificado Digital"
+    msg['From'] = 'notafiscalcertsempre@gmail.com'
+    msg['To'] = lerPlanilha['E-mail do Titular'][x]
+    password = 'ksbzriefhjehzjkl'
+
+    msg.attach(MIMEText(corpo_email, 'html'))
+
+    with open(caminho_pdf, 'rb') as attachment:
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(attachment.read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', f"attachment; filename={nome_cliente}.pdf")
+        msg.attach(part)
+
+    s = smtplib.SMTP('smtp.gmail.com: 587')
+    s.starttls()
+
+    s.login(msg['From'], password)
+
+    s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
+
     contador +=1
 
-    print('')
     print('———————————————————————————–—————–—————–—————–——–—————–——–—————–——–—————–——–—————–')
-    print(f'NOTA FISCAL DE NRª {contador} EMITIDA COM SUCESSO ✅ ')
+    print(f'⇨ EMAIL ENVIADO PARA O CLIENTE 📩 nº{contador}')
     print('———————————————————————————–—————–—————–—————–——–—————–——–—————–——–—————–——–—————–')
-    print('')
