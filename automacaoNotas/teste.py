@@ -24,8 +24,8 @@ browser.maximize_window()
 
 ############## Leitura da planilha ##############
 
-shetname = '01 a 10.11'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Sara Novembro Nova.xlsx'
+shetname = '13 a 18.11'
+caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Novembro JP.xlsx'
 
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
 
@@ -51,7 +51,6 @@ botaoEntrar = browser.find_element(By.ID, "commandButton_entrar")
 
 login = Login()
 formatacao = Formatacao()
-totalNotasEmitidas = 0
 
 cpf = str(login.get_cpf())
 senha = str(login.get_senha())
@@ -61,18 +60,20 @@ contador = 0
 while True:
     try:
         loginCpf.send_keys(str(login.get_cpf()))
+        time.sleep(0.5)
         password.send_keys(str(login.get_senha()))
+        time.sleep(0.5)
         botaoEntrar.click()
         break
     except:
         continue
 
-for x in range(7):
-    try:
-        botaoContinuar = browser.find_element(By.ID, 'formMensagens:commandButton_confirmar')
-        botaoContinuar.click()
-    except:
-        print("")
+# for x in range(7):
+#     try:
+#         botaoContinuar = browser.find_element(By.ID, 'formMensagens:commandButton_confirmar')
+#         botaoContinuar.click()
+#     except:
+#         print("Não consigo")
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
 
@@ -354,9 +355,11 @@ for x in range(int(formatacao.quantidadeNotas())):
             break
         except:
             continue
-    
+
+    # //*[@id="j_idt19:msgPrincipal"]/div/ul/li/span[1] span acesso negado
+
     while True:
-        try:  
+        try:
             botaoEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandButton_emitir"]/span[2]').click()
             break
         except:
@@ -422,14 +425,13 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
 
-            
-
+        
     corpo_email = """
-    <p>SEGUE EM ANEXO NOTA FISCAL REFERENTE AO CERTIFICADO DIGITAL</p>
+    <p>Segue em anexo a nota fiscal referente ao certificado digital</p>
     """
 
     msg = MIMEMultipart()
-    msg['Subject'] = "NOTA FISCAL CERTIFICADO DIGITAL"
+    msg['Subject'] = "Nota fiscal Certificado Digital"
     msg['From'] = 'notafiscalcertsempre@gmail.com'
     msg['To'] = lerPlanilha['E-mail do Titular'][x]
     password = 'ksbzriefhjehzjkl'
