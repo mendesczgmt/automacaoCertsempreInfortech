@@ -24,8 +24,8 @@ browser.maximize_window()
 
 ############## Leitura da planilha ##############
 
-shetname = '01 a 10.11'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Sara Novembro Nova.xlsx'
+shetname = '24 a 30.11'
+caminhoNotas = 'C:\\Users\\Suporte\\downloads\\planilha Sara Dezembro 01.xlsx'
 
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
 
@@ -61,40 +61,18 @@ contador = 0
 while True:
     try:
         loginCpf.send_keys(str(login.get_cpf()))
+        time.sleep(0.5)
         password.send_keys(str(login.get_senha()))
+        time.sleep(0.5)
         botaoEntrar.click()
         break
     except:
         continue
 
-for x in range(7):
-    try:
-        botaoContinuar = browser.find_element(By.ID, 'formMensagens:commandButton_confirmar')
-        botaoContinuar.click()
-    except:
-        print("")
-
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
 
 for x in range(int(formatacao.quantidadeNotas())):
     
-    ######### OPÇÕES DO NAVEGADOR #########
-
-    options = webdriver.ChromeOptions()
-    nome_cliente = lerPlanilha['Nome'][x]
-    caminho_pdf = f'C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\Notas fiscais\\11 - NOVEMBRO 2023\\{nome_cliente}.pdf'
-
-    options.add_experimental_option('prefs', {
-        'download.default_directory': caminho_pdf,
-        'download.prompt_for_download': False,
-        'download.directory_upgrade': True,
-        'plugins.always_open_pdf_externally': True,
-        'safebrowsing.enabled': True,
-        'profile.default_content_settings.popups': 0
-    })
-
-    ######## OPÇÕES DO NAVEGADOR #########
-
     while True:
         try:
             botaoNao = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:selectradio_retencao_iss"]/tbody/tr/td[3]/div').click()
@@ -115,16 +93,25 @@ for x in range(int(formatacao.quantidadeNotas())):
             break
         except:
             continue
-    
-    time.sleep(1.5)
-    caixa_cpf_cnpj = browser.find_element(By.NAME, 'form_emitir_nfse:inputmask_cpf_cnpj')
-    caixa_cpf_cnpj.clear()
-    time.sleep(1.5)
-    caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
-    time.sleep(1.5)
-    botao_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_buscar_cpfcnpj"]/span').click()
-    time.sleep(1.5)
 
+    while True:
+        try:
+            caixa_cpf_cnpj = browser.find_element(By.ID, 'form_emitir_nfse:inputmask_cpf_cnpj')
+            caixa_cpf_cnpj.clear()
+            caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
+            time.sleep(1)
+            break
+        except:
+            continue
+
+    while True:
+        try:
+            botao_buscar_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_buscar_cpfcnpj"]/span').click()
+            time.sleep(3)
+            break
+        except:
+            continue
+    
     while True:
         try:
             browser.find_element(By.XPATH, '//*[@id="j_idt47:msgPrincipal"]/div') ## Spam sem cadastro
@@ -222,9 +209,6 @@ for x in range(int(formatacao.quantidadeNotas())):
                 except:
                     continue
 
-            else:
-                continue
-
             browser.switch_to.window(browser.window_handles[0])
 
             while True:
@@ -249,7 +233,6 @@ for x in range(int(formatacao.quantidadeNotas())):
                     break
                 else:
                     continue
-            
             while True:
                 try:
                     time.sleep(2)
@@ -356,7 +339,7 @@ for x in range(int(formatacao.quantidadeNotas())):
             continue
     
     while True:
-        try:  
+        try:
             botaoEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandButton_emitir"]/span[2]').click()
             break
         except:
@@ -414,15 +397,12 @@ for x in range(int(formatacao.quantidadeNotas())):
     else:
         print(f"        ERRO NO DOWNLOAD PARA {nome_cliente}")
     
-
     while True:
         try:
             botaoContinuar = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_fechar_visualizacao"]/span').click()
             break
         except:
             continue
-
-            
 
     corpo_email = """
     <p>Segue em anexo a nota fiscal referente ao certificado digital</p>

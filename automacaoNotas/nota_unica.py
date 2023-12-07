@@ -1,6 +1,7 @@
 import time
 import pandas as pd
 import pyautogui
+import os
 
 from datetime import datetime
 from selenium import webdriver
@@ -32,11 +33,13 @@ senha = str(login.get_senha())
 
 ######## DADOS DA NOTA ###########
 
-documento = "18.252.530/0001-92"
+
+documento = "31.170.789/0001-52"
 protocolo = ""
-razaoSocial = "INFOCO COMERCIO DE PRODUTOS OPTICOS LTDA"
-valorNota = "150,00"
-referencia = "Referente a emissão do Certificado Digital"
+razaoSocial = "CLINICA DE MEDICINA ONCOLOGICA LTDA"
+valorNota = "180,00"
+referencia = "referente a filial que foi emitida o certificado."#\nSITECNET INFORMATICA LTDA FILIAL - 06346446000744\n SITECNET INFORMATICA LTDA FILIAL 06346446000582\n SITECNET INFORMATICA LTDA FILIAL 06346446000310\n SITECNET INFORMATICA LTDA FILIAL 06346446000663 "
+
 #\nDADOS BANCÁRIOS:\nBANCO SICOB 756\nAG: 4293\nCONTA: 1430351\nCERTSEMPRE SERVIÇOS DE CERTIFICAÇÃO DIGITAL."
 
 ##################################
@@ -44,18 +47,13 @@ referencia = "Referente a emissão do Certificado Digital"
 while True:
     try:
         loginCpf.send_keys(str(login.get_cpf()))
+        time.sleep(0.5)
         password.send_keys(str(login.get_senha()))
+        time.sleep(0.5)
         botaoEntrar.click()
         break
     except:
         continue
-
-for x in range(7):
-    try:
-        botaoContinuar = browser.find_element(By.ID, 'formMensagens:commandButton_confirmar')
-        botaoContinuar.click()
-    except:
-        print("")
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
 
@@ -91,7 +89,7 @@ time.sleep(2)
 
 while True:
     try:
-        browser.find_element(By.XPATH, '//*[@id="j_idt47:msgPrincipal"]/div') ## Spam sem cadastro
+        browser.find_element(By.XPATH, '//*[@id="j_idt73:msgPrincipal"]/div/ul/li/span[1]') ## Spam sem cadastro
         browser.switch_to.window(browser.window_handles[-1])
         
         while True:
@@ -200,6 +198,7 @@ while True:
 
         while True:
             try:
+                campoCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:inputmask_cep').click()
                 campoCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:inputmask_cep').send_keys(cep)
                 break
             except:
@@ -328,7 +327,8 @@ while True:
 
 while True:
     try:
-        img = pyautogui.locateCenterOnScreen('botao_dowload_nota.png', confidence=0.9)
+        endereco = 'C:\\Users\\Suporte\\OneDrive\\Documentos\\Kaio\\automacaoCertsempreInfortech\\automacaoNotas\\dwn.png'
+        img = pyautogui.locateCenterOnScreen(endereco)
         pyautogui.click(img.x, img.y)
         time.sleep(3)
         break
@@ -351,4 +351,15 @@ while True:
     except:
         continue
 
-print(f'---> NOTA FISCAL DE {razaoSocial} EMITIDA ✅')
+time.sleep(7)
+
+
+caminho_pdf =f'C:\\Users\\Suporte\\Downloads\\{razaoSocial}.pdf'
+
+if os.path.exists(caminho_pdf):
+    print(f"        DOWNLOAD CONCLUÍDO PARA {razaoSocial}")
+else:
+    print(f"        ERRO NO DOWNLOAD PARA {razaoSocial}")
+
+
+print(f'⋯⋯⋯>      NOTA FISCAL DE {razaoSocial} EMITIDA ✅')

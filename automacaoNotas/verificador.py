@@ -7,12 +7,13 @@ from Formatacao import Formatacao
 
 formatacao = Formatacao()
 
-shetname = '13 a 18.11'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Novembro JP.xlsx'
+shetname = '24 a 30.11'
+caminhoNotas = 'C:\\Users\\Suporte\\downloads\\planilha Sara Dezembro 01.xlsx'
 
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
 
 lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
+
 lerPlanilha['Produto'] = lerPlanilha['Produto'].astype(str)
 #lerPlanilha['Nome do AVP'] = lerPlanilha['Nome do AVP'].astype(str)
 lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)

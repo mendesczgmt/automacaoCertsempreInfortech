@@ -3,7 +3,6 @@ import pandas as pd
 import pyautogui
 import openpyxl
 import os
-
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -19,13 +18,20 @@ from Login import Login
 from Formatacao import Formatacao
 from selenium import webdriver
 
+
+
+
+
+
+
+
 browser = webdriver.Chrome()
 browser.maximize_window()
 
 ############## Leitura da planilha ##############
 
 shetname = '13 a 18.11'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões NF Novembro JP.xlsx'
+caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Nova Planilha Nov 2023.xlsx'
 
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
 
@@ -55,7 +61,6 @@ formatacao = Formatacao()
 cpf = str(login.get_cpf())
 senha = str(login.get_senha())
 contador = 0
-
 
 while True:
     try:
@@ -117,18 +122,21 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
     
-    time.sleep(1.5)
+    time.sleep(2)
     caixa_cpf_cnpj = browser.find_element(By.NAME, 'form_emitir_nfse:inputmask_cpf_cnpj')
     caixa_cpf_cnpj.clear()
-    time.sleep(1.5)
+    time.sleep(2)
     caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
-    time.sleep(1.5)
+    time.sleep(2)
     botao_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_buscar_cpfcnpj"]/span').click()
-    time.sleep(1.5)
+    time.sleep(2)
 
     while True:
         try:
-            browser.find_element(By.XPATH, '//*[@id="j_idt47:msgPrincipal"]/div') ## Spam sem cadastro
+            browser.find_element(By.XPATH, '//*[@id="j_idt73:msgPrincipal"]/div/ul/li/span[1]') ## Spam sem cadastro
+
+            #browser.find_element(By.XPATH, '//*[@id="j_idt47:msgPrincipal"]/div') ## Spam sem cadastro antigo
+            
             browser.switch_to.window(browser.window_handles[-1])
             
             while True:
@@ -425,9 +433,6 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
     
-
-
-        
     corpo_email = """
     <p>Segue em anexo a nota fiscal referente ao certificado digital</p>
     """
