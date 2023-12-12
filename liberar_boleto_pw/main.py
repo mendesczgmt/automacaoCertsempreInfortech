@@ -9,7 +9,7 @@ login = Login()
 email = str(login.get_email)
 senha = str(login.get_senha())
 
-protocoloBoleto = '70482180'
+protocoloBoleto = '69180996'
     
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False)

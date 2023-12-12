@@ -69,9 +69,9 @@ while True:
     except:
         continue
 
-browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
-
 for x in range(int(formatacao.quantidadeNotas())):
+
+    browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
     
     while True:
         try:
@@ -138,7 +138,7 @@ for x in range(int(formatacao.quantidadeNotas())):
                 except:
                     continue
             
-            campoProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[4]/div[1]/input')
+            campoProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[4]/div[1]/input')
             
             while True:
                 try:
@@ -149,21 +149,21 @@ for x in range(int(formatacao.quantidadeNotas())):
             
             while True:
                 try:
-                    botaoPesquisarProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[9]/div/div/div/button[1]').click()
+                    botaoPesquisarProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[9]/div/div/div/button[1]/span').click()
                     break
                 except:
                     continue
 
             while True:
                 try:
-                    lupaProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[2]/table/tbody/tr/td[2]/i[1]').click()
+                    lupaProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[2]/table/tbody/tr/td[2]/i[1]').click()
                     break
                 except:
                     continue
             
             while True:
                 try:
-                    razaoSocial = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[3]/div[1]/input').get_attribute("value")
+                    razaoSocial = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[3]/div[1]/input').get_attribute("value")
                     if(razaoSocial != ""):
                         break
                 except:
@@ -171,7 +171,7 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
-                    cep = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[1]/input').get_attribute("value")
+                    cep = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[1]/input').get_attribute("value")
                     if(cep != ""):
                         break
                 except:
@@ -179,7 +179,7 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
-                    numero = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[2]/input').get_attribute("value")
+                    numero = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[2]/input').get_attribute("value")
                     if(numero != ""):
                         break
                 except:
@@ -187,7 +187,7 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
-                    logradouro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[1]/input').get_attribute("value")
+                    logradouro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[1]/input').get_attribute("value")
                     if(logradouro != ""):
                         break
                 except:
@@ -195,7 +195,7 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
-                    bairro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[3]/input').get_attribute("value")
+                    bairro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[3]/input').get_attribute("value")
                     if(bairro != ""):
                         break
                 except:
@@ -203,7 +203,7 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
-                    municipio = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[3]/input').get_attribute("value")
+                    municipio = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[3]/input').get_attribute("value")
                     if(municipio != ""):
                         break
                 except:
@@ -332,8 +332,6 @@ for x in range(int(formatacao.quantidadeNotas())):
             valor = valor + '00'
             valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').click()
             valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').send_keys(valor)
-            #valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').click()
-            #valorServico = browser.find_element(By.ID, 'form_emitir_nfse:intputmask_valor_servico').send_keys(valor)
             break
         except:
             continue
@@ -365,9 +363,6 @@ for x in range(int(formatacao.quantidadeNotas())):
             img = pyautogui.locateCenterOnScreen(endereco)
             pyautogui.click(img.x, img.y)
             time.sleep(3)
-#           img = pyautogui.locateCenterOnScreen('dwn.jpg', confidence=0.9)
-#           pyautogui.click(img.x, img.y)
-#           time.sleep(3)
             break
         except:
             continue
@@ -397,12 +392,6 @@ for x in range(int(formatacao.quantidadeNotas())):
     else:
         print(f"        ERRO NO DOWNLOAD PARA {nome_cliente}")
     
-    while True:
-        try:
-            botaoContinuar = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_fechar_visualizacao"]/span').click()
-            break
-        except:
-            continue
 
     corpo_email = """
     <p>Segue em anexo a nota fiscal referente ao certificado digital</p>
@@ -435,3 +424,20 @@ for x in range(int(formatacao.quantidadeNotas())):
     print('———————————————————————————–—————–—————–—————–——–—————–——–—————–——–—————–——–—————–')
     print(f'⇨ EMAIL ENVIADO PARA O CLIENTE 📩 nº{contador}')
     print('———————————————————————————–—————–—————–—————–——–—————–——–—————–——–—————–——–—————–')
+
+    while True:
+        try:
+            botaoContinuar = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandbutton_fechar_visualizacao"]/span').click()
+            break
+        except:
+            continue
+
+    i = 0
+    while i < 11:
+        i += 1
+        try:
+            spanAcessoNegado = browser.find_element(By.XPATH, '//*[@id="j_idt19:msgPrincipal"]/div/ul/li/span[1] span acesso negado')
+            botaoHome = browser.find_element(By.XPATH, '//*[@id="j_idt20:j_idt22"]/span[2]').click()
+            break
+        except:
+            continue
