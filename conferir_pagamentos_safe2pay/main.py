@@ -1,22 +1,28 @@
 import time
 import pandas as pd
 import openpyxl
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from Login import Login
+from Formatacao import Formatacao
 
-shetname = 'Primeira'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Conferir Pagamentos.xlsx'
+login = Login()
+email = str(login.get_email())
+senha = str(login.get_senha())
 
-lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname)
+formatacao = Formatacao()
+caminhoNota = str(formatacao.get_caminhoNota())
+sheetnameNota = str(formatacao.get_sheetnameNota())
+
+lerPlanilha = pd.read_excel(caminhoNota, sheet_name=sheetnameNota)
 
 browser = webdriver.Chrome()
 browser.maximize_window()
 browser.get("https://safe2pay.com.br/login?session=timeout")
 
-email_login = browser.find_element(By.XPATH, '//*[@id="inputLoginMail"]').send_keys('financeirocertsempre@gmail.com')
-senha_login = browser.find_element(By.XPATH, '//*[@id="inputLoginPassword"]').send_keys('Certsempre@123@')
+email_login = browser.find_element(By.XPATH, '//*[@id="inputLoginMail"]').send_keys(str(login.get_email))
+senha_login = browser.find_element(By.XPATH, '//*[@id="inputLoginPassword"]').send_keys(str(login.get_senha))
 entrar = browser.find_element(By.XPATH, '//*[@id="SignInModal"]/div/div/div[3]/button').click()
 
 while True:
@@ -39,9 +45,6 @@ while True:
         break
     except:
         continue
-
-
-
 
 
 time.sleep(300)
