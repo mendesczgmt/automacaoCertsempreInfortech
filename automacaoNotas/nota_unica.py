@@ -33,14 +33,11 @@ senha = str(login.get_senha())
 
 ######## DADOS DA NOTA ###########
 
-
-documento = "31.170.789/0001-52"
-protocolo = ""
-razaoSocial = "CLINICA DE MEDICINA ONCOLOGICA LTDA"
-valorNota = "180,00"
-referencia = "referente a filial que foi emitida o certificado."#\nSITECNET INFORMATICA LTDA FILIAL - 06346446000744\n SITECNET INFORMATICA LTDA FILIAL 06346446000582\n SITECNET INFORMATICA LTDA FILIAL 06346446000310\n SITECNET INFORMATICA LTDA FILIAL 06346446000663 "
-
-#\nDADOS BANCÁRIOS:\nBANCO SICOB 756\nAG: 4293\nCONTA: 1430351\nCERTSEMPRE SERVIÇOS DE CERTIFICAÇÃO DIGITAL."
+documento = "39.920.532/0001-82"
+protocolo = "1004979206"
+razaoSocial = "BELEM VELHO RESTAURANTE E COMERCIO DE ALIMENTOS LTDA"
+valorNota = "150,00"
+referencia = "referente a emissão do certificado digital."#\nDADOS BANCÁRIOS:\nBANCO SICOB 756\nAG: 4293\nCONTA: 1430351\nCERTSEMPRE SERVIÇOS DE CERTIFICAÇÃO DIGITAL."
 
 ##################################
 
@@ -89,7 +86,9 @@ time.sleep(2)
 
 while True:
     try:
-        browser.find_element(By.XPATH, '//*[@id="j_idt73:msgPrincipal"]/div/ul/li/span[1]') ## Spam sem cadastro
+        browser.find_element(By.XPATH, '//*[@id="j_idt47:msgPrincipal"]/div') ## Spam sem cadastro
+        #browser.find_element(By.XPATH, '//*[@id="j_idt73:msgPrincipal"]/div/ul/li/span[1]') ## Spam sem cadastro
+
         browser.switch_to.window(browser.window_handles[-1])
         
         while True:
@@ -113,7 +112,7 @@ while True:
             except:
                 continue
         
-        campoProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[4]/div[1]/input')
+        campoProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[4]/div[1]/input')
         
         while True:
             try:
@@ -124,21 +123,21 @@ while True:
         
         while True:
             try:
-                botaoPesquisarProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[9]/div/div/div/button[1]').click()
+                botaoPesquisarProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[9]/div/div/div/button[1]/span').click()
                 break
             except:
                 continue
 
         while True:
             try:
-                lupaProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-lista/form/div/div/div[2]/table/tbody/tr/td[2]/i[1]').click()
+                lupaProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[2]/table/tbody/tr/td[2]/i[1]').click()
                 break
             except:
                 continue
         
         while True:
             try:
-                razaoSocial = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[3]/div[1]/input').get_attribute("value")
+                razaoSocial = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[3]/div[1]/input').get_attribute("value")
                 if(razaoSocial != ""):
                     break
             except:
@@ -146,7 +145,7 @@ while True:
 
         while True:
             try:
-                cep = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[1]/input').get_attribute("value")
+                cep = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[1]/input').get_attribute("value")
                 if(cep != ""):
                     break
             except:
@@ -154,7 +153,7 @@ while True:
 
         while True:
             try:
-                numero = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[2]/input').get_attribute("value")
+                numero = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[2]/input').get_attribute("value")
                 if(numero != ""):
                     break
             except:
@@ -162,7 +161,7 @@ while True:
 
         while True:
             try:
-                logradouro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[1]/input').get_attribute("value")
+                logradouro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[1]/input').get_attribute("value")
                 if(logradouro != ""):
                     break
             except:
@@ -170,7 +169,7 @@ while True:
 
         while True:
             try:
-                bairro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[3]/input').get_attribute("value")
+                bairro = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[5]/div[3]/input').get_attribute("value")
                 if(bairro != ""):
                     break
             except:
@@ -178,7 +177,7 @@ while True:
 
         while True:
             try:
-                municipio = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/ng-component/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[3]/input').get_attribute("value")
+                municipio = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-gestao/form/div/div/div[1]/div[2]/div[6]/div[3]/input').get_attribute("value")
                 if(municipio != ""):
                     break
             except:

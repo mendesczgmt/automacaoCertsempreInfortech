@@ -18,13 +18,6 @@ from Login import Login
 from Formatacao import Formatacao
 from selenium import webdriver
 
-
-
-
-
-
-
-
 browser = webdriver.Chrome()
 browser.maximize_window()
 

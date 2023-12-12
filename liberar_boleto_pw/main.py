@@ -2,19 +2,23 @@ import sys
 import time
 from playwright.sync_api import sync_playwright
 import time
+from Login import Login
 
-login = 'financeirocertsempre@gmail.com'
-senha = 'Certsempre@123@'
-protocoloBoleto = '70071527'
+login = Login()
+
+email = str(login.get_email)
+senha = str(login.get_senha())
+
+protocoloBoleto = '70482180'
     
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
 
     page.goto('https://safe2pay.com.br/login?redirect=%2F')
-    page.fill('input[id=inputLoginMail]', login)
-    page.fill('input[id=inputLoginPassword]', senha)
+    page.fill('input[id=inputLoginMail]', str(login.get_email()))
+    page.fill('input[id=inputLoginPassword]', str(login.get_senha()))
     page.locator('//*[@id="SignInModal"]/div/div/div[3]/button').click()
     time.sleep(15)
     page.goto('https://admin.safe2pay.com.br/transacoes')
