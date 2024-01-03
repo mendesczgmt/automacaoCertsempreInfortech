@@ -1,9 +1,7 @@
 import time
 import pandas as pd
 import pyautogui
-import openpyxl
 import os
-
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -17,6 +15,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from Login import Login
 from Formatacao import Formatacao
+import verificador
 from selenium import webdriver
 
 browser = webdriver.Chrome()
@@ -24,8 +23,8 @@ browser.maximize_window()
 
 ############## Leitura da planilha ##############
 
-shetname = '24 a 30.11'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\planilha Sara Dezembro 01.xlsx'
+shetname = '18 a 22.12'
+caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões Sara Dezembro.xlsx'
 
 lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
 
@@ -36,6 +35,8 @@ lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
 lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
 lerPlanilha['E-mail do Titular'] = lerPlanilha['E-mail do Titular'].astype(str)
+
+verificador.verificadorNotaBaixada()
 
 ###################################################
 
@@ -57,13 +58,12 @@ cpf = str(login.get_cpf())
 senha = str(login.get_senha())
 contador = 0
 
-
 while True:
     try:
         loginCpf.send_keys(str(login.get_cpf()))
-        time.sleep(0.5)
+        time.sleep(1)
         password.send_keys(str(login.get_senha()))
-        time.sleep(0.5)
+        time.sleep(1)
         botaoEntrar.click()
         break
     except:
@@ -71,7 +71,22 @@ while True:
 
 for x in range(int(formatacao.quantidadeNotas())):
 
-    browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
+    browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/index.jsf")
+    time.sleep(3)
+
+    while True:
+        try:
+            nfs_e = browser.find_element(By.XPATH, '//*[@id="formMenuPrincipal:menuPrincipal"]/ul/li[1]/a/span[1]').click()
+            break
+        except:
+            continue
+
+    while True:
+        try:
+            emitir = browser.find_element(By.XPATH, '//*[@id="formMenuPrincipal:menuPrincipal"]/ul/li[1]/ul/li[1]/a/span').click()
+            break
+        except:
+            continue
     
     while True:
         try:
@@ -220,6 +235,21 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
+                    selecionePais = browser.find_element(By.XPATH,'//*[@id="form_emitir_nfse:sispmjp_endereco:select_paises_label"]').click()
+                    break
+                except:
+                    continue
+
+            while True:
+                try:
+                    brasilPais = browser.find_element(By.XPATH,'//*[@id="form_emitir_nfse:sispmjp_endereco:select_paises_panel"]/div/ul/li[2]').click() 
+                    break
+                except:
+                    continue
+
+            while True:
+                try:
+                    time.sleep(4)
                     campoCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:inputmask_cep').click()
                     campoCep = browser.find_element(By.ID,'form_emitir_nfse:sispmjp_endereco:inputmask_cep').send_keys(cep)
                     break
@@ -247,7 +277,7 @@ for x in range(int(formatacao.quantidadeNotas())):
                 try:
                     time.sleep(1.5)
                     botaoSelecionarCidade = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio"]/div[3]').click()
-                    time.sleep(1)
+                    time.sleep(1.5)
                     municipio = municipio.lower()
                     cidades = ['//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[2]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[3]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[136]', '//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_panel"]/div/ul/li[212]','//*[@id="form_emitir_nfse:sispmjp_endereco:select_municipio_label"]']
                     for y in cidades:
@@ -301,7 +331,7 @@ for x in range(int(formatacao.quantidadeNotas())):
     while True:
         try:
             servico = browser.find_element(By.ID, 'form_emitir_nfse:selectOneMenu_lista_servico_panel').click()
-            time.sleep(2)
+            time.sleep(1.5)
             break
         except:
             continue
@@ -335,7 +365,7 @@ for x in range(int(formatacao.quantidadeNotas())):
             break
         except:
             continue
-    
+
     while True:
         try:
             botaoEmitir = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:commandButton_emitir"]/span[2]').click()
@@ -381,7 +411,7 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
     
-    time.sleep(7)
+    time.sleep(5)
     
     nome_cliente = lerPlanilha['Nome'][x]
 
@@ -433,7 +463,7 @@ for x in range(int(formatacao.quantidadeNotas())):
             continue
 
     i = 0
-    while i < 11:
+    while i < 3:
         i += 1
         try:
             spanAcessoNegado = browser.find_element(By.XPATH, '//*[@id="j_idt19:msgPrincipal"]/div/ul/li/span[1] span acesso negado')

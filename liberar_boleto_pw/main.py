@@ -9,10 +9,10 @@ login = Login()
 email = str(login.get_email)
 senha = str(login.get_senha())
 
-protocoloBoleto = '69180996'
-    
+protocoloBoleto = '71907965'
+
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
+    browser = p.chromium.launch()
     context = browser.new_context()
     page = context.new_page()
 
@@ -23,7 +23,7 @@ with sync_playwright() as p:
     time.sleep(15)
     page.goto('https://admin.safe2pay.com.br/transacoes')
 
-        
+
     if len(protocoloBoleto) == 10:
 
         page.locator('button.btn.btn-default[ng-click="CreatedDateInitial_Change();CreatedDateInitialOpen()"]').click()

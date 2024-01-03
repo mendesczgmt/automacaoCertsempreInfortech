@@ -8,4 +8,3 @@ class Formatacao:
     
     def get_sheetnameNota(self):
         return self._sheetnameNota
-    

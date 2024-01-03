@@ -1,7 +1,6 @@
 import time
 import pandas as pd
 import pyautogui
-import openpyxl
 import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -16,6 +15,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from Login import Login
 from Formatacao import Formatacao
+import verificador
 from selenium import webdriver
 
 browser = webdriver.Chrome()
@@ -37,6 +37,8 @@ lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
 lerPlanilha['E-mail do Titular'] = lerPlanilha['E-mail do Titular'].astype(str)
 
 ###################################################
+
+verificador.verificadorNotaBaixada()
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/login.jsf")
 browser.execute_script("window.open('', '_blank');")
@@ -66,14 +68,7 @@ while True:
     except:
         continue
 
-# for x in range(7):
-#     try:
-#         botaoContinuar = browser.find_element(By.ID, 'formMensagens:commandButton_confirmar')
-#         botaoContinuar.click()
-#     except:
-#         print("Não consigo")
-
-browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
+browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/index.jsf")
 
 for x in range(int(formatacao.quantidadeNotas())):
     
