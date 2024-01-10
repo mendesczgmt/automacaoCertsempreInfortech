@@ -4,8 +4,8 @@ from Formatacao import Formatacao
 formatacao = Formatacao()
 
 def verificadorNotaBaixada():
-    shetname = '18 a 22.12'
-    caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões Sara Dezembro.xlsx'
+    shetname = '26.12 a 06.01'
+    caminhoNotas = 'C:\\Users\\Suporte\\downloads\\planilha janeiro sara.xlsx'
     lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
     lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
     lerPlanilha['Produto'] = lerPlanilha['Produto'].astype(str)
@@ -23,7 +23,7 @@ def verificadorNotaBaixada():
         
         cont += 1
         nome_cliente = lerPlanilha['Nome'][x]
-        caminho_pdf =f'C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\Notas fiscais\\12 - DEZEMBRO 2023\\{nome_cliente}.pdf'
+        caminho_pdf =f'C:\\Users\\Suporte\\OneDrive\\Área de Trabalho\\Notas fiscais\\ANO 2024\\01 - JANEIRO 2024\\{nome_cliente}.pdf'
 
         if os.path.exists(caminho_pdf):
             cont_baixada += 1
@@ -33,8 +33,9 @@ def verificadorNotaBaixada():
             
     if cont_baixada > 0:
         print('\n')
-        print (f"Alerta! Você possui {cont_baixada} notas já baixadas, retire da Planilha")
-
-
-
-
+        alerta = int(input(f"Alerta! Você possui {cont_baixada} notas já baixadas!\nAperte: \n[1] - PARAR [2] - CONTINUAR "))
+        if alerta == 1:
+            quit()
+        else:
+            print('Continuando...')
+        

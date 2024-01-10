@@ -33,10 +33,10 @@ senha = str(login.get_senha())
 
 ######## DADOS DA NOTA ###########
 
-documento = "01.612.642/0001-04"
-protocolo = "1005023209"
-razaoSocial = "MUNICIPIO DE ZABELE_"
-valorNota = " 245,00"
+documento = "12.301.257/0001-62"
+protocolo = "1005082524"
+razaoSocial = "CLAVER ANALISES TRATAMENTO DE AGUA E IMUNIZACAO LTDA"
+valorNota = "139,00"
 referencia = "referente a emissão do certificado digital." #\nDADOS BANCÁRIOS:\nBANCO SICOB 756\nAG: 4293\nCONTA: 1430351\nCERTSEMPRE SERVIÇOS DE CERTIFICAÇÃO DIGITAL."
 
 ##################################
@@ -53,6 +53,27 @@ while True:
         continue
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/nfse/NFSe_EmitirNFse.jsf")
+
+while True:
+    try:
+        continua = browser.find_element(By.XPATH, '//*[@id="formMensagens:commandButton_confirmar"]/span[2]').click()
+        break
+    except:
+        continue
+
+while True:
+    try:
+        nfs_e = browser.find_element(By.XPATH, '//*[@id="formMenuPrincipal:menuPrincipal"]/ul/li[1]/a/span[1]').click()
+        break
+    except:
+        continue
+
+while True:
+    try:
+        emitir = browser.find_element(By.XPATH, '//*[@id="formMenuPrincipal:menuPrincipal"]/ul/li[1]/ul/li[1]/a/span').click()
+        break
+    except:
+        continue
 
 while True:
     try:
@@ -238,19 +259,25 @@ while True:
 
         while True:
             try:
-                campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]').send_keys(logradouro)
+                campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]')
+                campoLogradouro.clear()
+                campoLogradouro.send_keys(logradouro)
                 break
             except:
                 continue
         while True:
             try:
-                campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]').send_keys(numero)
+                campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]')
+                campoNumero.clear()
+                campoNumero.send_keys(numero)
                 break
             except:
                 continue
         while True:
             try:
-                campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]').send_keys(bairro)
+                campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]')
+                campoBairro.clear()
+                campoBairro.send_keys(bairro)
                 break
             except:
                 continue
