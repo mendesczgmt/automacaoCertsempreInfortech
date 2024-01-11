@@ -4,21 +4,13 @@ from Formatacao import Formatacao
 formatacao = Formatacao()
 
 def verificadorNotaBaixada():
-    shetname = '26.12 a 06.01'
-    caminhoNotas = 'C:\\Users\\Suporte\\downloads\\planilha janeiro sara.xlsx'
-    lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
+    lerPlanilha = pd.read_excel(Formatacao().get_caminhoNotas(), Formatacao().get_sheetnameNotas(), dtype={'Documento': str})
     lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
-    lerPlanilha['Produto'] = lerPlanilha['Produto'].astype(str)
-    #lerPlanilha['Nome do AVP'] = lerPlanilha['Nome do AVP'].astype(str)
-    lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
-    #lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
-    lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
-    #lerPlanilha['E-mail do Titular'] = lerPlanilha['E-mail do Titular'].astype(str)
-    # Verifica se já tem nota baixada do mesmo cliente
 
     cont = 0
     cont_baixada = 0
-
+    listNotas = []
+    
     for x in range(int(formatacao.quantidadeNotas())):
         
         cont += 1
@@ -28,14 +20,22 @@ def verificadorNotaBaixada():
         if os.path.exists(caminho_pdf):
             cont_baixada += 1
             print(f"       {cont} - ✅ JÁ EXISTE DOWLOAD PARA ESSE CLIENTE {nome_cliente}")
+            listNotas = listNotas.append(nome_cliente)
         else:
             print(f"       {cont} - ❌ NÃO EXISTE DOWNLOAD PARA ESSE CLIENTE {nome_cliente}")
             
     if cont_baixada > 0:
+
+
+        #achar a linha que tem o nome
+        #excluir a linha do df
         print('\n')
-        alerta = int(input(f"Alerta! Você possui {cont_baixada} notas já baixadas!\nAperte: \n[1] - PARAR [2] - CONTINUAR "))
+        alerta = int(input(f"Alerta! Você possui {cont_baixada} notas já baixadas!\nAperte: \n[1] - ALTERAR NA PLANILHA\n [2] - CONTINUAR SEM ALTERAR "))
         if alerta == 1:
-            quit()
+            lerPlanilha.drop()
         else:
             print('Continuando...')
         
+        print(listNotas)
+
+verificadorNotaBaixada()

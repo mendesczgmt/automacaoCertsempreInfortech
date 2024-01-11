@@ -1,16 +1,11 @@
 import datetime
 import pandas as pd
 
-shetname = '26.12 a 06.01'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\planilha janeiro sara.xlsx'
-
-lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname)
-
 class Formatacao:
     def __init__(self):
         self._data = datetime.date.today().strftime('%d/%m/%Y')
         self._caminhoNotas = 'C:\\Users\\Suporte\\downloads\\planilha janeiro sara.xlsx'
-        self.shetname = '26.12 a 06.01'
+        self.sheetnameNotas = '26.12 a 06.01'
         self._valor = 0
     
     def formatarValor(self, valor):
@@ -28,7 +23,10 @@ class Formatacao:
         return num_linhas
     
     def get_caminhoNotas(self):
-        return caminhoNotas
+        return self._caminhoNotas
+    
+    def get_sheetnameNotas(self):
+        return self.sheetnameNotas
 
     def get_pegarValor(self):
         self._valor = str(self._valor)
@@ -36,4 +34,4 @@ class Formatacao:
         self._valor = int(self._valor)
         return self._valor
 
-    
+lerPlanilha = pd.read_excel(Formatacao().get_caminhoNotas(), Formatacao().get_sheetnameNotas())

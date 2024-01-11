@@ -18,15 +18,15 @@ from Formatacao import Formatacao
 import verificador
 from selenium import webdriver
 
+
+login = Login()
+formatacao = Formatacao()
 browser = webdriver.Chrome()
 browser.maximize_window()
 
 ############## Leitura da planilha ##############
 
-shetname = '18 a 22.12'
-caminhoNotas = 'C:\\Users\\Suporte\\downloads\\Emissões Sara Dezembro.xlsx'
-
-lerPlanilha = pd.read_excel(caminhoNotas, sheet_name=shetname, dtype={'Documento': str})
+lerPlanilha = pd.read_excel(Formatacao().get_caminhoNotas(), Formatacao().get_sheetnameNotas(), dtype={'Documento': str})
 
 lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
 lerPlanilha['Produto'] = lerPlanilha['Produto'].astype(str)
@@ -50,8 +50,6 @@ loginCpf = browser.find_element(By.ID, "j_username")
 password = browser.find_element(By.ID, "j_password")
 botaoEntrar = browser.find_element(By.ID, "commandButton_entrar")
 
-login = Login()
-formatacao = Formatacao()
 totalNotasEmitidas = 0
 
 cpf = str(login.get_cpf())
@@ -65,6 +63,15 @@ while True:
         password.send_keys(str(login.get_senha()))
         time.sleep(1)
         botaoEntrar.click()
+        break
+    except:
+        continue
+    
+browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/paginas/index.jsf")
+
+while True:
+    try:
+        continua = browser.find_element(By.XPATH, '//*[@id="formMensagens:commandButton_confirmar"]/span[2]').click()
         break
     except:
         continue
@@ -292,22 +299,25 @@ for x in range(int(formatacao.quantidadeNotas())):
 
             while True:
                 try:
-                    campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]').clear()
-                    campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]').send_keys(logradouro)
+                    campoLogradouro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_lagradouro"]')
+                    campoLogradouro.clear()
+                    campoLogradouro.send_keys(logradouro)
                     break
                 except:
                     continue
             while True:
                 try:
-                    campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]').clear()
-                    campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]').send_keys(numero)
+                    campoNumero = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputmask_numero"]')
+                    campoNumero.clear()
+                    campoNumero.send_keys(numero)
                     break
                 except:
                     continue
             while True:
                 try:
-                    campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]').clear()
-                    campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]').send_keys(bairro)
+                    campoBairro = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:sispmjp_endereco:inputtext_bairro"]')
+                    campoBairro.clear()
+                    campoBairro.send_keys(bairro)
                     break
                 except:
                     continue
@@ -387,6 +397,16 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue 
 
+    i = 0
+    while i < 3:
+        i += 1
+        try:
+            spanAcessoNegado = browser.find_element(By.XPATH, '//*[@id="j_idt19:msgPrincipal"]/div/ul/li/span[1] span acesso negado')
+            botaoHome = browser.find_element(By.XPATH, '//*[@id="j_idt20:j_idt22"]/span[2]').click()
+            break
+        except:
+            continue
+
     while True:
         try:
             endereco = 'C:\\Users\\Suporte\\OneDrive\\Documentos\\Kaio\\automacaoCertsempreInfortech\\automacaoNotas\\dwn.png'
@@ -462,12 +482,4 @@ for x in range(int(formatacao.quantidadeNotas())):
         except:
             continue
 
-    i = 0
-    while i < 3:
-        i += 1
-        try:
-            spanAcessoNegado = browser.find_element(By.XPATH, '//*[@id="j_idt19:msgPrincipal"]/div/ul/li/span[1] span acesso negado')
-            botaoHome = browser.find_element(By.XPATH, '//*[@id="j_idt20:j_idt22"]/span[2]').click()
-            break
-        except:
-            continue
+
