@@ -25,9 +25,6 @@ def verificadorNotaBaixada(lerPlanilha):
             
     if cont_baixada > 0:
         print('\n')
-        alerta = int(input(f"Alerta! Você possui {cont_baixada} notas já baixadas!\nAperte: \n[1] - RETIRAR DA PLANILHA\n[2] - CONTINUAR SEM ALTERAR "))
-        if alerta == 1:
-            print('Alterado Na Planilha...')
+        input(f"Alerta! Você possui {cont_baixada} notas já baixadas!\nAPERTE [Enter] PARA RETIRAR DA PLANILHA ")
     
     return lerPlanilha
-

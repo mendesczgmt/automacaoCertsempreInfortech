@@ -35,7 +35,6 @@ lerPlanilha['E-mail do Titular'] = lerPlanilha['E-mail do Titular'].astype(str)
 
 lerPlanilha = verificador.verificadorNotaBaixada(lerPlanilha)
 lerPlanilha = lerPlanilha.reset_index(drop=True)
-print(lerPlanilha)
 
 ###################################################
 browser = webdriver.Chrome()
