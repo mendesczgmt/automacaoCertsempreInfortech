@@ -18,11 +18,8 @@ from Formatacao import Formatacao
 import verificador
 from selenium import webdriver
 
-
 login = Login()
 formatacao = Formatacao()
-browser = webdriver.Chrome()
-browser.maximize_window()
 
 ############## Leitura da planilha ##############
 
@@ -36,9 +33,13 @@ lerPlanilha['Documento'] = lerPlanilha['Documento'].astype(str)
 lerPlanilha['Valor do Boleto'] = lerPlanilha['Valor do Boleto'].astype(str)
 lerPlanilha['E-mail do Titular'] = lerPlanilha['E-mail do Titular'].astype(str)
 
-verificador.verificadorNotaBaixada()
+lerPlanilha = verificador.verificadorNotaBaixada(lerPlanilha)
+lerPlanilha = lerPlanilha.reset_index(drop=True)
+print(lerPlanilha)
 
 ###################################################
+browser = webdriver.Chrome()
+browser.maximize_window()
 
 browser.get("https://sispmjp.joaopessoa.pb.gov.br:8080/nfse/login.jsf")
 browser.execute_script("window.open('', '_blank');")
@@ -118,10 +119,10 @@ for x in range(int(formatacao.quantidadeNotas())):
 
     while True:
         try:
-            caixa_cpf_cnpj = browser.find_element(By.ID, 'form_emitir_nfse:inputmask_cpf_cnpj')
+            caixa_cpf_cnpj = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:inputmask_cpf_cnpj"]')
             caixa_cpf_cnpj.clear()
-            caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
             time.sleep(1)
+            caixa_cpf_cnpj.send_keys(lerPlanilha['Documento'][x])
             break
         except:
             continue
@@ -372,6 +373,7 @@ for x in range(int(formatacao.quantidadeNotas())):
             valor = valor + '00'
             valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').click()
             valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').send_keys(valor)
+            time.sleep(2000)
             break
         except:
             continue
