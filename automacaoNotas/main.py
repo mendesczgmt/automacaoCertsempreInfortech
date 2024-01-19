@@ -23,7 +23,7 @@ formatacao = Formatacao()
 
 ############## Leitura da planilha ##############
 
-lerPlanilha = pd.read_excel(Formatacao().get_caminhoNotas(), Formatacao().get_sheetnameNotas(), dtype={'Documento': str})
+lerPlanilha = pd.read_excel(Formatacao().get_caminhoNotas(), Formatacao().get_sheetnameNotas(), dtype={'Documento': str, 'Protocolo': str})
 
 lerPlanilha['Nome'] = lerPlanilha['Nome'].astype(str)
 lerPlanilha['Produto'] = lerPlanilha['Produto'].astype(str)
@@ -37,6 +37,7 @@ lerPlanilha = verificador.verificadorNotaBaixada(lerPlanilha)
 lerPlanilha = lerPlanilha.reset_index(drop=True)
 
 ###################################################
+
 browser = webdriver.Chrome()
 browser.maximize_window()
 
@@ -159,16 +160,19 @@ for x in range(int(formatacao.quantidadeNotas())):
                     break
                 except:
                     continue
-            
+
+            time.sleep(5)
+
             campoProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[4]/div[1]/input')
-            
+
             while True:
-                try:
-                    campoProtocolo.send_keys(lerPlanilha['Protocolo'][x])
+                 try:
+                    #campoProtocolo.clear()
+                    campoProtocolo.send_keys(str(lerPlanilha['Protocolo'][x]))
                     break
-                except:
+                 except:
                     continue
-            
+        
             while True:
                 try:
                     botaoPesquisarProtocolo = browser.find_element(By.XPATH, '/html/body/app-root/div/div/app-pages/div[1]/div/div/app-relatorio-emissao-lista/form/div/div/div[1]/div[2]/pages-filter/div/div[9]/div/div/div/button[1]/span').click()
@@ -359,6 +363,7 @@ for x in range(int(formatacao.quantidadeNotas())):
             break
         except:
             continue
+
     while True:
         try:
             botaoContinuar = browser.find_element(By.ID, 'form_emitir_nfse:commandButton_continuar').click()
@@ -368,11 +373,10 @@ for x in range(int(formatacao.quantidadeNotas())):
 
     while True:
         try:
-            valor = (lerPlanilha['Valor do Boleto'][x])
+            valor = (str(lerPlanilha['Valor do Boleto'][x]))
             valor = valor + '00'
             valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').click()
             valorServico = browser.find_element(By.XPATH, '//*[@id="form_emitir_nfse:intputmask_valor_servico"]').send_keys(valor)
-            time.sleep(2000)
             break
         except:
             continue
@@ -402,7 +406,7 @@ for x in range(int(formatacao.quantidadeNotas())):
     while i < 3:
         i += 1
         try:
-            spanAcessoNegado = browser.find_element(By.XPATH, '//*[@id="j_idt19:msgPrincipal"]/div/ul/li/span[1] span acesso negado')
+            spanAcessoNegado = browser.find_element(By.XPATH, '//*[@id="j_idt19:msgPrincipal"]/div/ul/li/span[1]')
             botaoHome = browser.find_element(By.XPATH, '//*[@id="j_idt20:j_idt22"]/span[2]').click()
             break
         except:

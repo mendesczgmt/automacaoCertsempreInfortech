@@ -33,11 +33,11 @@ senha = str(login.get_senha())
 
 ######## DADOS DA NOTA ###########
 
-documento = "12.301.257/0001-62"
-protocolo = "1005082524"
-razaoSocial = "CLAVER ANALISES TRATAMENTO DE AGUA E IMUNIZACAO LTDA"
-valorNota = "139,00"
-referencia = "referente a emissão do certificado digital." #\nDADOS BANCÁRIOS:\nBANCO SICOB 756\nAG: 4293\nCONTA: 1430351\nCERTSEMPRE SERVIÇOS DE CERTIFICAÇÃO DIGITAL."
+documento = "09275074000105"
+protocolo = "1005135034"
+razaoSocial = "ASSOC ATLETICA BANCO DO BRASIL	"
+valorNota = "200,00"
+referencia = "referente a emissão do certificado digital. \nDADOS BANCÁRIOS:\nBANCO SICOB 756\nAG: 4293\nCONTA: 1430351\nCERTSEMPRE SERVIÇOS DE CERTIFICAÇÃO DIGITAL."
 
 ##################################
 

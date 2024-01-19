@@ -4,7 +4,7 @@ import pandas as pd
 class Formatacao:
     def __init__(self):
         self._data = datetime.date.today().strftime('%d/%m/%Y')
-        self._caminhoNotas = 'C:\\Users\\kaion\\Downloads\\planilha janeiro sara_.xlsx'
+        self._caminhoNotas = 'C:\\Users\\Suporte\\Downloads\\teste.xlsx'
         self.sheetnameNotas = '26.12 a 06.01'
         self._valor = 0
     
@@ -34,4 +34,5 @@ class Formatacao:
         self._valor = int(self._valor)
         return self._valor
 
-lerPlanilha = pd.read_excel(Formatacao().get_caminhoNotas(), Formatacao().get_sheetnameNotas())
+lerPlanilha = pd.read_excel(Formatacao().get_caminhoNotas(), Formatacao().get_sheetnameNotas(), dtype={'Documento': str})
+
